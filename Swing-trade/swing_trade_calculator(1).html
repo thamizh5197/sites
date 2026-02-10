@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swing Trade Calculator - Groww</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .calculator {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calculate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .reset-btn {
+            background: #f5f5f5;
+            color: #555;
+        }
+
+        .reset-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .copy-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(17, 153, 142, 0.4);
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+
+        .copied {
+            background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%) !important;
+        }
+
+        .target-stoploss-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+
+        .section-title {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .slider-group {
+            margin-bottom: 25px;
+        }
+
+        .slider-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .slider-header label {
+            margin: 0;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .slider-value {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            outline: none;
+            -webkit-appearance: none;
+            margin-bottom: 15px;
+        }
+
+        .target-slider {
+            background: linear-gradient(to right, #667eea 0%, #38ef7d 100%);
+        }
+
+        .stoploss-slider {
+            background: linear-gradient(to right, #f5576c 0%, #f093fb 100%);
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .slider::-moz-range-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .price-display {
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            color: white;
+            text-align: center;
+        }
+
+        .target-display {
+            background: linear-gradient(135deg, #667eea 0%, #38ef7d 100%);
+        }
+
+        .stoploss-display {
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+        }
+
+        .price-display strong {
+            font-size: 18px;
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .result-value {
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .profit-row {
+            margin-top: 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .profit-row .result-label,
+        .profit-row .result-value {
+            color: white;
+            font-size: 18px;
+        }
+
+        .loss {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+        }
+
+        .breakdown-title {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .info-text {
+            font-size: 12px;
+            color: #999;
+            margin-top: 20px;
+            text-align: center;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>Swing Trade Calculator</h1>
+        <p class="subtitle">Calculate profit with Groww brokerage & taxes</p>
+
+        <div class="input-group">
+            <label for="entryPrice">Entry Price (₹)</label>
+            <input type="number" id="entryPrice" placeholder="Enter buying price" step="0.01" min="0">
+        </div>
+
+        <div class="input-group">
+            <label for="exitPrice">Exit Price (₹)</label>
+            <input type="number" id="exitPrice" placeholder="Enter selling price" step="0.01" min="0">
+        </div>
+
+        <div class="input-group">
+            <label for="quantity">Quantity</label>
+            <input type="number" id="quantity" placeholder="Enter number of shares" step="1" min="1">
+        </div>
+
+        <div class="target-stoploss-section">
+            <div class="section-title">📊 Target & Stop Loss Calculator</div>
+            
+            <div class="slider-group">
+                <div class="slider-header">
+                    <label>Target Profit %</label>
+                    <span class="slider-value" id="targetPercentValue">5%</span>
+                </div>
+                <input type="range" id="targetPercent" min="1" max="50" value="5" step="0.5" class="slider target-slider">
+                <div class="price-display target-display">
+                    Target Exit Price: <strong id="targetPrice">₹0.00</strong>
+                </div>
+            </div>
+
+            <div class="slider-group">
+                <div class="slider-header">
+                    <label>Stop Loss %</label>
+                    <span class="slider-value" id="stoplossPercentValue">3%</span>
+                </div>
+                <input type="range" id="stoplossPercent" min="1" max="20" value="3" step="0.5" class="slider stoploss-slider">
+                <div class="price-display stoploss-display">
+                    Stop Loss Price: <strong id="stoplossPrice">₹0.00</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="calculate-btn" onclick="calculateProfit()">Calculate Profit</button>
+            <button class="reset-btn" onclick="resetCalculator()">Reset</button>
+        </div>
+
+        <button class="copy-btn" id="copyBtn" onclick="copyToClipboard()" style="display: none;">
+            📋 Copy for Spreadsheet
+        </button>
+
+        <div class="results" id="results">
+            <div class="breakdown-title">Transaction Breakdown</div>
+            
+            <div class="result-row">
+                <span class="result-label">Buy Value</span>
+                <span class="result-value" id="buyValue">₹0.00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Sell Value</span>
+                <span class="result-value" id="sellValue">₹0.00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Brokerage (Buy + Sell)</span>
+                <span class="result-value" id="brokerage">₹0.00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">STT (Securities Transaction Tax)</span>
+                <span class="result-value" id="stt">₹0.00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Exchange Transaction Charges</span>
+                <span class="result-value" id="exchangeCharges">₹0.00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">GST (on brokerage + charges)</span>
+                <span class="result-value" id="gst">₹0.00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">SEBI Charges</span>
+                <span class="result-value" id="sebiCharges">₹0.00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Stamp Duty</span>
+                <span class="result-value" id="stampDuty">₹0.00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Total Charges</span>
+                <span class="result-value" id="totalCharges">₹0.00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Gross Profit (before tax)</span>
+                <span class="result-value" id="grossProfit">₹0.00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Capital Gains Tax (15%)</span>
+                <span class="result-value" id="taxAmount">₹0.00</span>
+            </div>
+
+            <div class="profit-row" id="profitRow">
+                <span class="result-label">Net Profit/Loss (After Tax)</span>
+                <span class="result-value" id="netProfit">₹0.00</span>
+            </div>
+        </div>
+
+        <p class="info-text">
+            * Groww charges ₹20 or 0.05% (whichever is lower) per trade<br>
+            * STT: 0.025% on sell side only (Delivery)<br>
+            * Capital Gains Tax: 15% (STCG for shares held < 1 year)<br>
+            * All charges are as per current regulations (2025)<br><br>
+            <strong>📋 Spreadsheet Column Headers:</strong><br>
+            Date | Entry Price | Exit Price | Quantity | Buy Value | Sell Value | Brokerage | STT | Exchange Charges | GST | SEBI | Stamp Duty | Total Charges | Gross Profit | Tax (15%) | Net Profit
+        </p>
+    </div>
+
+    <script>
+        // Update target and stop loss prices when entry price or sliders change
+        function updateTargetStopLoss() {
+            const entryPrice = parseFloat(document.getElementById('entryPrice').value);
+            const targetPercent = parseFloat(document.getElementById('targetPercent').value);
+            const stoplossPercent = parseFloat(document.getElementById('stoplossPercent').value);
+
+            if (entryPrice && entryPrice > 0) {
+                // Calculate target price
+                const targetPrice = entryPrice * (1 + targetPercent / 100);
+                document.getElementById('targetPrice').textContent = `₹${targetPrice.toFixed(2)}`;
+
+                // Calculate stop loss price
+                const stoplossPrice = entryPrice * (1 - stoplossPercent / 100);
+                document.getElementById('stoplossPrice').textContent = `₹${stoplossPrice.toFixed(2)}`;
+            } else {
+                document.getElementById('targetPrice').textContent = '₹0.00';
+                document.getElementById('stoplossPrice').textContent = '₹0.00';
+            }
+
+            // Update percentage displays
+            document.getElementById('targetPercentValue').textContent = `${targetPercent}%`;
+            document.getElementById('stoplossPercentValue').textContent = `${stoplossPercent}%`;
+        }
+
+        // Add event listeners for sliders and entry price
+        document.getElementById('targetPercent').addEventListener('input', updateTargetStopLoss);
+        document.getElementById('stoplossPercent').addEventListener('input', updateTargetStopLoss);
+        document.getElementById('entryPrice').addEventListener('input', updateTargetStopLoss);
+
+        function calculateProfit() {
+            const entryPrice = parseFloat(document.getElementById('entryPrice').value);
+            const exitPrice = parseFloat(document.getElementById('exitPrice').value);
+            const quantity = parseInt(document.getElementById('quantity').value);
+
+            if (!entryPrice || !exitPrice || !quantity) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (entryPrice <= 0 || exitPrice <= 0 || quantity <= 0) {
+                alert('Please enter valid positive values');
+                return;
+            }
+
+            // Calculate buy and sell values
+            const buyValue = entryPrice * quantity;
+            const sellValue = exitPrice * quantity;
+
+            // Groww Brokerage: ₹20 or 0.05% whichever is lower per trade
+            const buyBrokerage = Math.min(20, buyValue * 0.0005);
+            const sellBrokerage = Math.min(20, sellValue * 0.0005);
+            const totalBrokerage = buyBrokerage + sellBrokerage;
+
+            // STT (Securities Transaction Tax) - 0.025% on sell side only for delivery
+            const stt = sellValue * 0.00025;
+
+            // Exchange Transaction Charges - NSE: 0.00325% on turnover
+            const exchangeCharges = (buyValue + sellValue) * 0.0000325;
+
+            // SEBI Charges - ₹10 per crore
+            const sebiCharges = (buyValue + sellValue) * 0.000001;
+
+            // Stamp Duty - 0.015% on buy side (₹1500 per crore or 0.015%)
+            const stampDuty = buyValue * 0.00015;
+
+            // GST - 18% on (brokerage + exchange charges + SEBI charges)
+            const gst = (totalBrokerage + exchangeCharges + sebiCharges) * 0.18;
+
+            // Total charges
+            const totalCharges = totalBrokerage + stt + exchangeCharges + gst + sebiCharges + stampDuty;
+
+            // Gross profit/loss (before tax)
+            const grossProfit = sellValue - buyValue - totalCharges;
+
+            // Capital Gains Tax - 15% on profit (only if profit is positive)
+            const taxAmount = grossProfit > 0 ? grossProfit * 0.15 : 0;
+
+            // Net profit/loss (after tax)
+            const netProfit = grossProfit - taxAmount;
+
+            // Update UI
+            document.getElementById('buyValue').textContent = `₹${buyValue.toFixed(2)}`;
+            document.getElementById('sellValue').textContent = `₹${sellValue.toFixed(2)}`;
+            document.getElementById('brokerage').textContent = `₹${totalBrokerage.toFixed(2)}`;
+            document.getElementById('stt').textContent = `₹${stt.toFixed(2)}`;
+            document.getElementById('exchangeCharges').textContent = `₹${exchangeCharges.toFixed(2)}`;
+            document.getElementById('gst').textContent = `₹${gst.toFixed(2)}`;
+            document.getElementById('sebiCharges').textContent = `₹${sebiCharges.toFixed(2)}`;
+            document.getElementById('stampDuty').textContent = `₹${stampDuty.toFixed(2)}`;
+            document.getElementById('totalCharges').textContent = `₹${totalCharges.toFixed(2)}`;
+            document.getElementById('grossProfit').textContent = `₹${grossProfit.toFixed(2)}`;
+            document.getElementById('taxAmount').textContent = `₹${taxAmount.toFixed(2)}`;
+            document.getElementById('netProfit').textContent = `₹${netProfit.toFixed(2)}`;
+
+            // Update profit row color
+            const profitRow = document.getElementById('profitRow');
+            if (netProfit < 0) {
+                profitRow.classList.add('loss');
+            } else {
+                profitRow.classList.remove('loss');
+            }
+
+            // Show results
+            document.getElementById('results').classList.add('show');
+            document.getElementById('copyBtn').style.display = 'block';
+        }
+
+        function copyToClipboard() {
+            const entryPrice = parseFloat(document.getElementById('entryPrice').value);
+            const exitPrice = parseFloat(document.getElementById('exitPrice').value);
+            const quantity = parseInt(document.getElementById('quantity').value);
+            
+            const buyValue = document.getElementById('buyValue').textContent.replace('₹', '');
+            const sellValue = document.getElementById('sellValue').textContent.replace('₹', '');
+            const brokerage = document.getElementById('brokerage').textContent.replace('₹', '');
+            const stt = document.getElementById('stt').textContent.replace('₹', '');
+            const exchangeCharges = document.getElementById('exchangeCharges').textContent.replace('₹', '');
+            const gst = document.getElementById('gst').textContent.replace('₹', '');
+            const sebiCharges = document.getElementById('sebiCharges').textContent.replace('₹', '');
+            const stampDuty = document.getElementById('stampDuty').textContent.replace('₹', '');
+            const totalCharges = document.getElementById('totalCharges').textContent.replace('₹', '');
+            const grossProfit = document.getElementById('grossProfit').textContent.replace('₹', '');
+            const taxAmount = document.getElementById('taxAmount').textContent.replace('₹', '');
+            const netProfit = document.getElementById('netProfit').textContent.replace('₹', '');
+            
+            // Get current date
+            const today = new Date().toLocaleDateString('en-IN');
+            
+            // Create tab-separated string for spreadsheet
+            const data = `${today}\t${entryPrice}\t${exitPrice}\t${quantity}\t${buyValue}\t${sellValue}\t${brokerage}\t${stt}\t${exchangeCharges}\t${gst}\t${sebiCharges}\t${stampDuty}\t${totalCharges}\t${grossProfit}\t${taxAmount}\t${netProfit}`;
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(data).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied! Paste in your spreadsheet';
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy. Please try again.');
+            });
+        }
+
+        function resetCalculator() {
+            document.getElementById('entryPrice').value = '';
+            document.getElementById('exitPrice').value = '';
+            document.getElementById('quantity').value = '';
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('copyBtn').style.display = 'none';
+        }
+
+        // Allow Enter key to calculate
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateProfit();
+            }
+        });
+    </script>
+</body>
+</html>
