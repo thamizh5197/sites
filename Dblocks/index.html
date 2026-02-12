@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dblocks - AI-Powered Design Workflow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: #e4e4e7;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #ffffff 0%, #e4e4e7 100%);
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 24px;
+            overflow: hidden;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out;
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-primary {
+            background: #ffffff;
+            color: #0a0a0a;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.2);
+            background: #fafafa;
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .text-primary {
+            color: #ffffff;
+        }
+        
+        .text-secondary {
+            color: #a1a1aa;
+        }
+        
+        .bg-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .glow {
+            box-shadow: 0 0 80px rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Grid background effect like Linear */
+        .grid-bg {
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        @media (max-width: 768px) {
+            .workflow-arrow::after {
+                content: '↓';
+                right: 50%;
+                top: auto;
+                bottom: -30px;
+                transform: translateX(50%);
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-[#e4e4e7] grid-bg">
+    <!-- Navigation -->
+    <nav class="fixed w-full glass z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-white">Dblocks</div>
+            <button onclick="scrollToSignup()" class="btn-primary px-6 py-2 rounded-full font-medium">
+                Get Early Access
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center fade-in">
+                <h1 class="text-6xl md:text-7xl font-bold mb-6 leading-tight text-white">
+                    Design with AI.<br/>
+                    <span class="gradient-text">Ship Real Code.</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-secondary mb-12 max-w-3xl mx-auto">
+                    The first design tool where designers create production-ready code with AI assistance. 
+                    No handoff. No translation. Just ship.
+                </p>
+                <div class="flex gap-4 justify-center flex-wrap">
+                    <button onclick="scrollToSignup()" class="btn-primary px-8 py-4 rounded-full text-lg font-semibold">
+                        Join the Waitlist
+                    </button>
+                    <button onclick="scrollToDemo()" class="btn-secondary px-8 py-4 rounded-full text-lg font-semibold">
+                        See How It Works
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Statement -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">The Design-to-Dev Handoff is Broken</h2>
+                <p class="text-xl text-secondary max-w-3xl mx-auto">
+                    Designers create in Figma. Developers recreate in code. Endless back-and-forth. Weeks of delays.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-strong p-8 rounded-2xl hover-lift">
+                    <div class="text-4xl mb-4">😤</div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Lost in Translation</h3>
+                    <p class="text-secondary">Your perfect design becomes "close enough" after developers interpret your mocks.</p>
+                </div>
+                
+                <div class="glass-strong p-8 rounded-2xl hover-lift">
+                    <div class="text-4xl mb-4">⏰</div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Endless Iterations</h3>
+                    <p class="text-secondary">"Can you move that button 5px to the left?" takes 3 days and a sprint ticket.</p>
+                </div>
+                
+                <div class="glass-strong p-8 rounded-2xl hover-lift">
+                    <div class="text-4xl mb-4">🔄</div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Constant Dependency</h3>
+                    <p class="text-secondary">Every design change requires developer time, slowing down your entire team.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution -->
+    <section class="py-20" id="demo">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">
+                    Designers Ship Code.<br/>
+                    <span class="gradient-text">Directly.</span>
+                </h2>
+                <p class="text-xl text-secondary max-w-3xl mx-auto">
+                    Describe what you want. AI generates production code. You iterate visually. 
+                    Commit to GitHub. No developer needed for UI.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
+                <div class="slide-in-left">
+                    <div class="glass-strong p-8 rounded-2xl glow">
+                        <div class="bg-card rounded-xl p-6 mb-4">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-black font-bold">AI</div>
+                                <div>
+                                    <div class="font-semibold text-white">AI Assistant</div>
+                                    <div class="text-sm text-secondary">Ready to help</div>
+                                </div>
+                            </div>
+                            <div class="glass rounded-lg p-4 mb-3">
+                                <p class="text-sm text-secondary">👋 What would you like to create today?</p>
+                            </div>
+                        </div>
+                        <div class="bg-card rounded-xl p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-full glass-strong flex items-center justify-center font-bold text-white">You</div>
+                                <div>
+                                    <div class="font-semibold text-white">Designer</div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-4">
+                                <p class="text-sm text-black">"Create a pricing page with 3 tiers, comparison table, and FAQ section"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slide-in-right">
+                    <h3 class="text-3xl font-bold mb-6 text-white">1. Chat with AI</h3>
+                    <p class="text-lg text-secondary mb-4">
+                        Describe your design in plain English. The AI understands your intent and generates production-ready React components.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <span class="text-white text-xl">✓</span>
+                            <span class="text-secondary">Natural language to code</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-white text-xl">✓</span>
+                            <span class="text-secondary">Uses your design system automatically</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-white text-xl">✓</span>
+                            <span class="text-secondary">Instant live preview</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
+                <div class="slide-in-left order-2 md:order-1">
+                    <h3 class="text-3xl font-bold mb-6 text-white">2. Iterate Visually</h3>
+                    <p class="text-lg text-secondary mb-4">
+                        See changes instantly. Adjust colors, spacing, layout - all through conversation. 
+                        Save versions as you go.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <span class="text-white text-xl">✓</span>
+                            <span class="text-secondary">Real-time visual feedback</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-white text-xl">✓</span>
+                            <span class="text-secondary">Version control built-in</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-white text-xl">✓</span>
+                            <span class="text-secondary">Full control over UI states</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="slide-in-right order-1 md:order-2">
+                    <div class="code-block glow">
+                        <div class="flex gap-2 mb-4">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <pre class="text-sm text-gray-300"><code>export function PricingPage({ plans, isLoading }) {
+  const [selectedPlan, setSelectedPlan] = useState('pro');
+  
+  if (isLoading) {
+    return <PricingSkeleton />;
+  }
+  
+  return (
+    <div className="grid grid-cols-3 gap-8">
+      {plans.map(plan => (
+        <PricingCard
+          key={plan.id}
+          {...plan}
+          isSelected={plan.id === selectedPlan}
+          onSelect={() => setSelectedPlan(plan.id)}
+        />
+      ))}
+    </div>
+  );
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="slide-in-left">
+                    <div class="glass-strong p-8 rounded-2xl glow">
+                        <div class="bg-card rounded-xl p-6 space-y-4">
+                            <div class="flex items-center justify-between pb-4 border-b border-white/10">
+                                <div>
+                                    <h4 class="font-bold text-white">Pull Request #247</h4>
+                                    <p class="text-sm text-secondary">pricing-page-redesign → dev</p>
+                                </div>
+                                <span class="px-3 py-1 bg-white/10 text-white rounded-full text-sm font-medium">Ready</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2 text-sm">
+                                    <span class="text-white">✓</span>
+                                    <span class="text-secondary">designers/pages/pricing.tsx</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-sm">
+                                    <span class="text-white">✓</span>
+                                    <span class="text-secondary">designers/components/PricingCard.tsx</span>
+                                </div>
+                            </div>
+                            <a href="#" class="block text-center bg-white text-black py-3 rounded-lg font-medium hover:bg-gray-100 transition">
+                                View Preview →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slide-in-right">
+                    <h3 class="text-3xl font-bold mb-6 text-white">3. Ship to Production</h3>
+                    <p class="text-lg text-secondary mb-4">
+                        Push for review with one click. Design lead approves. 
+                        Automatically deployed. Developers wire in data later.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <span class="text-white text-xl">✓</span>
+                            <span class="text-secondary">Real Git commits to your repo</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-white text-xl">✓</span>
+                            <span class="text-secondary">Automatic preview deployments</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-white text-xl">✓</span>
+                            <span class="text-secondary">Zero merge conflicts</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Diagram -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">Complete Separation of Concerns</h2>
+                <p class="text-xl text-secondary">Designers own the entire visual layer. Engineers wire in data. Zero overlap.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="glass-strong p-8 rounded-2xl hover-lift">
+                    <div class="text-4xl mb-4">🎨</div>
+                    <h3 class="text-2xl font-bold mb-4 gradient-text">Designer Owns</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <span class="text-white">●</span>
+                            <div>
+                                <div class="font-semibold text-white">All Pages & Components</div>
+                                <div class="text-sm text-secondary">Every pixel, every interaction</div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-white">●</span>
+                            <div>
+                                <div class="font-semibold text-white">UI States</div>
+                                <div class="text-sm text-secondary">Loading, error, empty, success states</div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-white">●</span>
+                            <div>
+                                <div class="font-semibold text-white">Navigation</div>
+                                <div class="text-sm text-secondary">All routes, links, and user flows</div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-white">●</span>
+                            <div>
+                                <div class="font-semibold text-white">Form Validation</div>
+                                <div class="text-sm text-secondary">Visual feedback and error messages</div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-white">●</span>
+                            <div>
+                                <div class="font-semibold text-white">Design System</div>
+                                <div class="text-sm text-secondary">Components, tokens, and patterns</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="glass-strong p-8 rounded-2xl hover-lift">
+                    <div class="text-4xl mb-4">⚙️</div>
+                    <h3 class="text-2xl font-bold mb-4 text-white/60">Engineer Owns</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <span class="text-white/40">●</span>
+                            <div>
+                                <div class="font-semibold text-white/80">Data Fetching</div>
+                                <div class="text-sm text-secondary">API calls, caching, state management</div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-white/40">●</span>
+                            <div>
+                                <div class="font-semibold text-white/80">Authentication</div>
+                                <div class="text-sm text-secondary">Login, logout, session management</div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-white/40">●</span>
+                            <div>
+                                <div class="font-semibold text-white/80">Business Logic</div>
+                                <div class="text-sm text-secondary">Calculations, rules, validations</div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-white/40">●</span>
+                            <div>
+                                <div class="font-semibold text-white/80">Database</div>
+                                <div class="text-sm text-secondary">Models, queries, migrations</div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-white/40">●</span>
+                            <div>
+                                <div class="font-semibold text-white/80">Integrations</div>
+                                <div class="text-sm text-secondary">Third-party APIs, webhooks</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <div class="inline-block glass-strong px-8 py-4 rounded-full glow">
+                    <p class="text-lg font-semibold">
+                        <span class="gradient-text">Interface:</span> 
+                        <span class="text-secondary mx-2">Simple TypeScript Props</span>
+                        <span class="text-white/40">→</span>
+                        <span class="text-secondary mx-2">Zero Conflicts</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">Why Teams Love It</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-white rounded-2xl flex items-center justify-center text-black text-3xl font-bold glow">10x</div>
+                    <h3 class="text-2xl font-bold mb-3 text-white">Faster Iteration</h3>
+                    <p class="text-secondary">Changes that took days now take minutes. Ship designs the moment they're ready.</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-white rounded-2xl flex items-center justify-center text-black text-3xl font-bold glow">0%</div>
+                    <h3 class="text-2xl font-bold mb-3 text-white">Lost in Translation</h3>
+                    <p class="text-secondary">What you design is exactly what ships. No interpretation, no compromise.</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-white rounded-2xl flex items-center justify-center text-black text-3xl font-bold glow">100%</div>
+                    <h3 class="text-2xl font-bold mb-3 text-white">Designer Autonomy</h3>
+                    <p class="text-secondary">Own the entire user experience without waiting on developers.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Placeholder -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">Trusted by Forward-Thinking Teams</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-strong p-8 rounded-2xl hover-lift">
+                    <div class="flex gap-1 mb-4">
+                        <span class="text-white">★</span>
+                        <span class="text-white">★</span>
+                        <span class="text-white">★</span>
+                        <span class="text-white">★</span>
+                        <span class="text-white">★</span>
+                    </div>
+                    <p class="text-secondary mb-4">"We went from 2-week design iterations to same-day shipping. This is the future of design tools."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full glass"></div>
+                        <div>
+                            <div class="font-semibold text-white">Sarah Chen</div>
+                            <div class="text-sm text-secondary">Lead Designer, TechCo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-strong p-8 rounded-2xl hover-lift">
+                    <div class="flex gap-1 mb-4">
+                        <span class="text-white">★</span>
+                        <span class="text-white">★</span>
+                        <span class="text-white">★</span>
+                        <span class="text-white">★</span>
+                        <span class="text-white">★</span>
+                    </div>
+                    <p class="text-secondary mb-4">"Our designers now ship production code. Developers can focus on complex features instead of pixel-pushing."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full glass"></div>
+                        <div>
+                            <div class="font-semibold text-white">Alex Kumar</div>
+                            <div class="text-sm text-secondary">Engineering Manager, StartupXYZ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-strong p-8 rounded-2xl hover-lift">
+                    <div class="flex gap-1 mb-4">
+                        <span class="text-white">★</span>
+                        <span class="text-white">★</span>
+                        <span class="text-white">★</span>
+                        <span class="text-white">★</span>
+                        <span class="text-white">★</span>
+                    </div>
+                    <p class="text-secondary mb-4">"The AI understands design intent better than most junior developers. It's like having a senior dev as your assistant."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full glass"></div>
+                        <div>
+                            <div class="font-semibold text-white">Maria Garcia</div>
+                            <div class="text-sm text-secondary">Product Designer, Scale Inc</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20" id="signup">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">
+                Ready to Ship Designs<br/>
+                <span class="gradient-text">Without the Handoff?</span>
+            </h2>
+            <p class="text-xl text-secondary mb-12">
+                Join 500+ designers who are already building the future of design workflows.
+            </p>
+
+            <form class="max-w-md mx-auto mb-8" onsubmit="handleSignup(event)">
+                <div class="flex gap-3 mb-4">
+                    <input 
+                        type="email" 
+                        id="email"
+                        placeholder="Enter your email" 
+                        required
+                        class="flex-1 px-6 py-4 rounded-full glass-strong text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 text-lg"
+                    >
+                    <button type="submit" class="btn-primary px-8 py-4 rounded-full font-semibold whitespace-nowrap">
+                        Get Early Access
+                    </button>
+                </div>
+                <p class="text-sm text-secondary">No credit card required. Join the waitlist today.</p>
+            </form>
+
+            <div id="success-message" class="hidden glass-strong border border-white/20 rounded-2xl p-6 max-w-md mx-auto">
+                <div class="text-white text-4xl mb-2">✓</div>
+                <h3 class="text-xl font-bold mb-2 text-white">You're on the list!</h3>
+                <p class="text-secondary">We'll send you an invite as soon as we're ready.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass-strong py-12 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="text-2xl font-bold mb-4 text-white">Dblocks</div>
+                    <p class="text-secondary">AI-powered design workflow for modern teams.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4 text-white">Product</h4>
+                    <ul class="space-y-2 text-secondary">
+                        <li><a href="#" class="hover:text-white transition">Features</a></li>
+                        <li><a href="#" class="hover:text-white transition">Pricing</a></li>
+                        <li><a href="#" class="hover:text-white transition">Documentation</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4 text-white">Company</h4>
+                    <ul class="space-y-2 text-secondary">
+                        <li><a href="#" class="hover:text-white transition">About</a></li>
+                        <li><a href="#" class="hover:text-white transition">Blog</a></li>
+                        <li><a href="#" class="hover:text-white transition">Careers</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4 text-white">Legal</h4>
+                    <ul class="space-y-2 text-secondary">
+                        <li><a href="#" class="hover:text-white transition">Privacy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 text-center text-secondary">
+                <p>&copy; 2025 Dblocks. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function scrollToSignup() {
+            document.getElementById('signup').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToDemo() {
+            document.getElementById('demo').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            
+            // Here you would normally send to your backend
+            console.log('Signup email:', email);
+            
+            // Show success message
+            event.target.classList.add('hidden');
+            document.getElementById('success-message').classList.remove('hidden');
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
